@@ -6,9 +6,12 @@ import suppliers.Retailer;
 import suppliers.Supplier;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class SuppliersTests {
 
@@ -28,6 +31,7 @@ public class SuppliersTests {
                 "Pepsi company",
                 new Drink("Pepsi", 1.0),
                 new Drink("PepsiZero", 1.5));
+
 
         suppliers.add( new Retailer("Cola importer")
                 .add(cocaCola)
@@ -49,6 +53,8 @@ public class SuppliersTests {
 
         store = new Store(suppliers.toArray(new Supplier[0]));
 
+
+
     }
 
 
@@ -63,4 +69,48 @@ public class SuppliersTests {
         int expectedProducts = 11;
         assertEquals(expectedProducts, store.getAllProducts().length);
     }
+
+    @Test
+    public void ApplyDiscount() {
+        Drink Ice_Tea= new Drink("Ice-Tea", 3);
+        Promo p= new Promo(Ice_Tea, 50);
+
+        assertEquals(1.5, p.getPrice(),22222222);
+    }
+
+
+
+    @Test
+    public void CheckMapSize() {
+        Map<Product.ProdType, Product> res = new HashMap<Product.ProdType, Product>();
+        res.put(Product.ProdType.DRINK, new Drink("Coca-Cola Zero",1.5));
+        res.put(Product.ProdType.FOOD, new Food("Morangos",3.0));
+        res.put(Product.ProdType.ELECTRONIC, new Electronic("Robot",300));
+        res.put(Product.ProdType.DRUGSTORE, new Cleaning("Limpa-vidros",2));
+        int size=res.size();
+        int size2= store.mostExpensiveByType().size();
+        assertEquals(size,size2);
+    }
+
+
+    @Test
+    public void MapGourmetProducts() {
+
+        Map<Product.ProdType, Product> res = new HashMap<Product.ProdType, Product>();
+        res.put(Product.ProdType.DRINK, new Drink("Coca-Cola Zero",1.5));
+        res.put(Product.ProdType.FOOD, new Food("Morangos",3.0));
+        res.put(Product.ProdType.ELECTRONIC, new Electronic("Robot",300));
+        res.put(Product.ProdType.DRUGSTORE, new Cleaning("Limpa-vidros",2));
+
+        assertEquals(res,store.mostExpensiveByType());
+
+        for (Product.ProdType name: store.mostExpensiveByType().keySet()){
+
+            String key =name.toString();
+            String value = store.mostExpensiveByType().get(name).toString();
+            System.out.println(key + " " + value);
+        }
+
+    }
+
 }
